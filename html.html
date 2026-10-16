@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bhavana, boarding now</title>
+<script>document.documentElement.className='js'</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+<style>
+/* Colours: change these three (plus neutrals) and the whole page follows */
+:root{--ink:#12241f;--teal:#0b6b63;--gold:#f2c230;--paper:#e9ece3;--ticket:#fbfbf7;
+--sans:'Archivo',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 1.05rem/1.6 var(--serif);overflow-x:hidden}
+body.lock{overflow:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.sans{font-family:var(--sans)}
+.ph{background:linear-gradient(transparent 62%,rgba(242,194,48,.55) 62%)} /* [bracketed] placeholder text */
+
+/* opening */
+#open{display:none;position:fixed;inset:0;z-index:50;background:var(--teal);color:var(--ticket);align-items:center;justify-content:center;flex-direction:column;gap:.4rem;font-family:var(--sans);text-align:center}
+.js #open{display:flex}
+#open b{font:900 clamp(2.6rem,14vw,6rem)/.9 var(--sans);font-stretch:70%}
+#open span{font-size:1rem;opacity:.85}
+#skip{display:none;position:fixed;right:1rem;bottom:1rem;z-index:60;font:600 .9rem var(--sans);background:var(--gold);color:var(--ink);border:2px solid var(--ink);padding:.55rem 1rem;cursor:pointer}
+.js #skip{display:block}
+
+/* top strip */
+nav{display:flex;gap:1.1rem;flex-wrap:wrap;padding:1rem 1.2rem;font:600 .95rem var(--sans);border-bottom:2px solid var(--ink)}
+nav a{text-decoration:none}nav a:hover{text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--teal)}
+nav a:first-child{margin-right:auto;font-weight:900}
+
+/* hero */
+.hero{padding:2rem 1.2rem 3rem;max-width:1100px;margin:auto;position:relative}
+.name{font:900 clamp(4rem,24vw,13rem)/.82;font-stretch:62%;letter-spacing:-.02em;color:var(--teal);margin-left:-.04em}
+.row{display:grid;gap:1.6rem;margin-top:1.6rem}
+.stamp{width:150px;height:150px;transform:rotate(-9deg);cursor:pointer;border:0;background:none;padding:0;justify-self:start;transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.stamp:hover{transform:rotate(4deg) scale(1.05)}
+.tag{font:italic 500 clamp(1.4rem,5vw,2rem)/1.2 var(--serif);max-width:20ch}
+.now{display:inline-block;margin-top:1rem;font:600 .95rem var(--sans);border:2px dashed var(--ink);padding:.35rem .7rem}
+.btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem}
+.btn{font:800 1rem var(--sans);text-decoration:none;padding:.8rem 1.4rem;border:2px solid var(--ink);display:inline-block;transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s}
+.btn.main{background:var(--ink);color:var(--ticket);border-radius:0 18px 0 18px}
+.btn.alt{background:var(--gold);border-radius:18px 0 18px 0}
+.btn:hover{transform:translateY(-3px)}
+@media(min-width:760px){.row{grid-template-columns:190px 1fr;align-items:center}.stamp{width:180px;height:180px}}
+
+/* ticket */
+.t{position:relative;background:var(--ticket);border:2px solid var(--ink);overflow:hidden;border-radius:10px}
+.t::before,.t::after{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);top:var(--n,auto);bottom:var(--nb,auto)}
+.t::before{left:-14px}.t::after{right:-14px}
+.main-p{padding:1.4rem 1.3rem 1.8rem}
+.stub{border-top:2px dashed var(--ink);padding:1rem 1.3rem;display:flex;gap:1.4rem;flex-wrap:wrap;font:600 .85rem var(--sans);position:relative}
+.stub i{display:block;font:400 .75rem var(--sans);opacity:.7;font-style:normal}
+.stub::before,.stub::after{content:"";position:absolute;top:-14px;width:26px;height:26px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.stub::before{left:-14px}.stub::after{right:-14px}
+.bar{margin-left:auto;width:96px;height:34px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 5px,var(--ink) 5px 6px,transparent 6px 8px,var(--ink) 8px 11px,transparent 11px 13px)}
+.band{background:var(--teal);color:var(--ticket);padding:.55rem 1.3rem;font:800 .95rem var(--sans);display:flex;justify-content:space-between}
+h2{font:900 clamp(2.6rem,12vw,5.6rem)/.9 var(--sans);font-stretch:66%;margin:0 0 1rem}
+section{padding:3.5rem 1.2rem;max-width:1100px;margin:auto}
+p+p{margin-top:1rem}
+
+/* about */
+.about .main-p{font-size:1.15rem;max-width:62ch}
+.about .t{transform:rotate(-.7deg)}
+.fold{margin-top:2rem;display:flex;justify-content:flex-end}
+.tagbtn{position:relative;font:700 1rem var(--sans);background:var(--gold);color:var(--ink);border:2px solid var(--ink);padding:1rem 1.2rem 1rem 2.6rem;cursor:pointer;clip-path:polygon(22px 0,100% 0,100% 100%,22px 100%,0 50%);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.tagbtn:hover{transform:rotate(-3deg)}
+.note{max-height:0;opacity:0;overflow:hidden;transform-origin:top right;transform:rotateX(-80deg);transition:max-height .6s cubic-bezier(.2,.8,.2,1),opacity .4s,transform .6s cubic-bezier(.2,.8,.2,1);background:var(--gold);border:2px solid var(--ink);border-top:0;margin-left:auto;max-width:360px;font:italic 500 1.2rem/1.4 var(--serif);padding:0 1.2rem}
+.note.on{max-height:240px;opacity:1;transform:none;padding:1rem 1.2rem}
+
+/* skills: boarding groups */
+.groups{display:grid;gap:1.2rem}
+.g{border:2px solid var(--ink);background:var(--ticket);display:grid;grid-template-columns:76px 1fr}
+.g .gn{background:var(--ink);color:var(--gold);font:900 3rem/1 var(--sans);display:grid;place-items:center}
+.g div+div{padding:1rem 1.1rem}
+.g h3{font:800 1.3rem var(--sans)}.g small{font:400 .9rem var(--sans);opacity:.75}
+.g ul{list-style:none;padding:0;margin-top:.6rem;display:flex;gap:.4rem;flex-wrap:wrap}
+.g li{border:1.5px solid var(--ink);border-radius:99px;padding:.1rem .7rem;font:600 .9rem var(--sans)}
+.g:nth-child(2){margin-left:1rem}.g:nth-child(3){margin-left:2rem}
+@media(min-width:760px){.groups{grid-template-columns:repeat(3,1fr);align-items:start}.g{grid-template-columns:1fr}.g .gn{padding:.4rem;justify-content:start;padding-left:1rem}.g:nth-child(n){margin-left:0}.g:nth-child(2){margin-top:2rem}.g:nth-child(3){margin-top:4rem}}
+
+/* journey */
+.legs{display:grid;gap:1.6rem}
+.legs .t:nth-child(1){--n:62%;transform:rotate(.8deg)}
+.legs .t:nth-child(2){margin-left:1.2rem;transform:rotate(-.9deg)}
+.legs .t:nth-child(3){margin-left:.4rem;transform:rotate(.5deg);background:var(--gold)}
+.legs .t::before,.legs .t::after{display:none}
+.legs h3{font:900 2rem/1 var(--sans);font-stretch:70%}
+.gate{font:800 .9rem var(--sans);display:flex;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:.4rem;margin-bottom:.8rem}
+@media(min-width:900px){.legs{grid-template-columns:repeat(3,1fr);align-items:start}.legs .t:nth-child(2){margin-top:2.4rem;margin-left:0}.legs .t:nth-child(3){margin-top:1rem;margin-left:0}}
+
+/* beyond code */
+.bag{display:flex;flex-wrap:wrap;gap:1.2rem 1.6rem;align-items:flex-start}
+.lug{width:min(100%,250px);background:var(--ticket);border:2px solid var(--ink);padding:2.6rem 1rem 1rem;position:relative;border-radius:6px 6px 14px 14px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.lug::before{content:"";position:absolute;top:.8rem;left:50%;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--paper)}
+.lug:nth-child(1){transform:rotate(-3deg)}.lug:nth-child(2){transform:rotate(2deg);margin-top:1.4rem;background:var(--gold)}.lug:nth-child(3){transform:rotate(-1deg)}
+.lug h3{font:800 1.15rem var(--sans)}
+
+/* contact */
+.contact .t{max-width:640px;margin-left:auto}
+.links{display:grid;gap:.2rem;margin-top:1rem}
+.links a{font:800 1.5rem var(--sans);font-stretch:75%;text-decoration:none;border-bottom:2px solid var(--ink);padding:.5rem 0;display:flex;justify-content:space-between;transition:padding .25s cubic-bezier(.2,.8,.2,1),background .25s}
+.links a:hover{padding-left:.8rem;background:var(--gold)}
+footer{padding:2rem 1.2rem 5rem;font:600 .9rem var(--sans);text-align:center}
+
+/* easter egg */
+#ok{position:fixed;left:50%;top:50%;z-index:40;pointer-events:none;font:900 clamp(3rem,16vw,7rem)/1 var(--sans);font-stretch:66%;color:var(--teal);border:8px solid var(--teal);padding:.1em .3em;border-radius:.15em;opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.6)}
+#ok.go{animation:slam 1.8s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes slam{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(2.6)}18%{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}}
+.rv{opacity:0;transform:translateY(14px)}.rv.in{opacity:1;transform:none;transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body class="lock">
+
+<div id="open" aria-hidden="true"><b>Bhavana</b><span>Now boarding</span></div>
+<button id="skip" type="button">Skip</button>
+
+<nav><a href="#top">Bhavana</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#journey">Journey</a><a href="#beyond">Beyond code</a><a href="#contact">Contact</a></nav>
+
+<header class="hero" id="top">
+  <h1 class="name">Bhavana</h1>
+  <div class="row">
+    <button class="stamp" id="mono" aria-label="Monogram stamp">
+      <svg viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-hidden="true">
+        <defs><path id="c" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"/></defs>
+        <circle cx="100" cy="100" r="94" fill="none" stroke="#0b6b63" stroke-width="5"/>
+        <circle cx="100" cy="100" r="58" fill="none" stroke="#0b6b63" stroke-width="2.5"/>
+        <text font-family="Archivo,sans-serif" font-weight="800" font-size="19" fill="#0b6b63" letter-spacing="3"><textPath href="#c">Cleared for take-off, B.Tech IT, year one, </textPath></text>
+        <text x="100" y="134" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-stretch="70%" font-size="96" fill="#12241f">B</text>
+      </svg>
+    </button>
+    <div>
+      <p class="tag"><span class="ph">[Your one-line tagline, in your own words]</span></p>
+      <p class="now">Currently: <span class="ph">[what you're learning or building right now]</span></p>
+      <div class="btns"><a class="btn main" href="#about">Explore</a><a class="btn alt" href="#contact">Say hi</a></div>
+    </div>
+  </div>
+</header>
+
+<section id="about" class="about">
+  <h2>About</h2>
+  <div class="t rv">
+    <div class="band sans"><span>Passenger: Bhavana</span><span>Seat 1A</span></div>
+    <div class="main-p">
+      <p><span class="ph">[Paragraph one: where you're from and how you ended up in B.Tech IT, in first person.]</span></p>
+      <p><span class="ph">[Paragraph two: the moment tech first clicked for you, or a small thing you made that you're proud of.]</span></p>
+      <p><span class="ph">[Paragraph three: what you hope to do next.]</span></p>
+    </div>
+    <div class="stub"><div><i>From</i>[Your town]</div><div><i>To</i>[Where you're headed]</div><div class="bar"></div></div>
+  </div>
+  <div class="fold">
+    <button class="tagbtn" id="nb" aria-expanded="false" aria-controls="nt">Tap to open the note</button>
+  </div>
+  <div class="note" id="nt" role="region" aria-label="Secret note"><span class="ph">[Write your secret note here: something you'd only tell a friend]</span></div>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <p class="rv" style="max-width:46ch;margin-bottom:1.6rem">Honest levels, sorted by boarding group. Group 1 is the one I reach for first.</p>
+  <div class="groups rv">
+    <div class="g"><div class="gn">1</div><div><h3>Comfortable</h3><small>I can do these without looking things up.</small><ul><li>[Skill]</li><li>[Skill]</li></ul></div></div>
+    <div class="g"><div class="gn">2</div><div><h3>Getting there</h3><small>I can build with these, slowly.</small><ul><li>[Skill]</li><li>[Skill]</li></ul></div></div>
+    <div class="g"><div class="gn">3</div><div><h3>Learning</h3><small>Just started, and enjoying it.</small><ul><li>[Skill]</li><li>[Skill]</li></ul></div></div>
+  </div>
+</section>
+
+<section id="journey">
+  <h2>Journey</h2>
+  <div class="legs">
+    <div class="t rv"><div class="main-p"><div class="gate"><span>Gate A</span><span>Landed</span></div><h3>What I've made</h3><p><span class="ph">[A project or two, one line each]</span></p></div><div class="stub"><div><i>Status</i>Done</div><div class="bar"></div></div></div>
+    <div class="t rv"><div class="main-p"><div class="gate"><span>Gate B</span><span>In the air</span></div><h3>What I'm learning</h3><p><span class="ph">[Courses, languages or tools you're on right now]</span></p></div><div class="stub"><div><i>Status</i>Boarded</div><div class="bar"></div></div></div>
+    <div class="t rv"><div class="main-p"><div class="gate"><span>Gate C</span><span>Next</span></div><h3>What I want to build</h3><p><span class="ph">[One idea you can't stop thinking about]</span></p></div><div class="stub"><div><i>Status</i>Boarding soon</div><div class="bar"></div></div></div>
+  </div>
+</section>
+
+<section id="beyond">
+  <h2>Beyond code</h2>
+  <div class="bag rv">
+    <div class="lug"><h3>When I'm off the laptop</h3><p><span class="ph">[Hobbies]</span></p></div>
+    <div class="lug"><h3>A fun fact</h3><p><span class="ph">[Something people don't guess about you]</span></p></div>
+    <div class="lug"><h3>On repeat lately</h3><p><span class="ph">[A song, show or book]</span></p></div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact</h2>
+  <div class="t rv">
+    <div class="band sans"><span>Say hi</span><span>Gate Z</span></div>
+    <div class="main-p">
+      <p>Open to hellos, advice and good project ideas.</p>
+      <div class="links">
+        <a href="mailto:you@example.com">Email <span>you@example.com</span></a>
+        <a href="https://linkedin.com/in/your-name" target="_blank" rel="noopener">LinkedIn <span>/in/your-name</span></a>
+        <a href="https://github.com/your-name" target="_blank" rel="noopener">GitHub <span>/your-name</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>Thanks for flying with me. Try tapping the stamp three times.</footer>
+<div id="ok" aria-hidden="true">Approved</div>
+
+<script>
+(function(){
+var op=document.getElementById('open'),sk=document.getElementById('skip'),done=false;
+function end(){if(done)return;done=true;op.remove();sk.remove();document.body.classList.remove('lock')}
+var seen=null;try{seen=sessionStorage.getItem('b-open')}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches){end()}
+else{
+  try{sessionStorage.setItem('b-open','1')}catch(e){}
+  sk.onclick=end;
+  var max=Math.hypot(innerWidth,innerHeight)/2+4,t0=null;
+  function ease(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2}
+  function tick(ts){
+    if(done)return;if(!t0)t0=ts;
+    var e=ts-t0;
+    if(e>600){var p=Math.min((e-600)/1600,1),r=ease(p)*max;
+      var m='radial-gradient(circle at 50% 50%,transparent '+r+'px,#000 '+(r+1)+'px)';
+      op.style.webkitMaskImage=m;op.style.maskImage=m;
+      if(p>=1){end();return}}
+    requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);
+}
+/* signature: tap-to-reveal note */
+var nb=document.getElementById('nb'),nt=document.getElementById('nt');
+nb.onclick=function(){var on=nt.classList.toggle('on');nb.setAttribute('aria-expanded',on);nb.textContent=on?'Fold it back':'Tap to open the note'};
+/* easter egg: tap the stamp 3 times */
+var n=0,tm,ok=document.getElementById('ok');
+document.getElementById('mono').onclick=function(){
+  n++;clearTimeout(tm);tm=setTimeout(function(){n=0},900);
+  if(n>=3){n=0;ok.classList.remove('go');void ok.offsetWidth;ok.classList.add('go')}};
+/* reveal */
+var els=document.querySelectorAll('.rv');
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  els.forEach(function(el){io.observe(el)});
+}else els.forEach(function(el){el.classList.add('in')});
+})();
+</script>
+</body>
+</html>
